@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine's Love Portal</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(to bottom, #2d1b3d, #4a1942, #1a0f1f);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+        perspective: 1000px;
+        opacity: 0;
+        animation: pageLoadFadeIn 1.5s ease forwards;
+      }
+
+      @keyframes pageLoadFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+          radial-gradient(2px 2px at 20% 30%, white, transparent),
+          radial-gradient(2px 2px at 60% 70%, white, transparent),
+          radial-gradient(1px 1px at 50% 50%, white, transparent),
+          radial-gradient(1px 1px at 80% 10%, white, transparent),
+          radial-gradient(2px 2px at 90% 60%, white, transparent),
+          radial-gradient(1px 1px at 33% 80%, white, transparent);
+        background-size: 200% 200%;
+        animation: twinkle 4s ease-in-out infinite;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      .scene {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: opacity 1s ease;
+      }
+
+      .scene.activated {
+        cursor: default;
+      }
+
+      .scene.fade-out {
+        opacity: 0;
+      }
+
+      .laptop {
+        position: relative;
+        width: 600px;
+        height: 400px;
+        transform-style: preserve-3d;
+        animation: laptopFloat 3s ease-in-out infinite;
+      }
+
+      @keyframes laptopFloat {
+        0%,
+        100% {
+          transform: translateY(0px) rotateX(5deg);
+        }
+        50% {
+          transform: translateY(-10px) rotateX(5deg);
+        }
+      }
+
+      .laptop-screen {
+        position: absolute;
+        width: 550px;
+        height: 350px;
+        background: linear-gradient(135deg, #1a0a0f 0%, #2d1520 100%);
+        border: 15px solid #3d2233;
+        border-radius: 10px;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%) rotateX(0deg);
+        box-shadow:
+          0 0 50px rgba(255, 20, 147, 0.5),
+          inset 0 0 30px rgba(255, 105, 180, 0.2);
+        overflow: hidden;
+        transition: box-shadow 0.5s ease;
+      }
+
+      .laptop-screen::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 8px;
+        background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        border-radius: 0 0 8px 8px;
+        z-index: 10;
+      }
+
+      .laptop-screen::after {
+        content: "";
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+        height: 6px;
+        background: radial-gradient(circle, #1a4d2e 0%, #0d2818 100%);
+        border-radius: 50%;
+        z-index: 11;
+        box-shadow: 0 0 3px rgba(26, 77, 46, 0.5);
+      }
+
+      .laptop-screen.glowing {
+        box-shadow:
+          0 0 100px rgba(255, 20, 147, 0.8),
+          0 0 150px rgba(255, 105, 180, 0.6),
+          inset 0 0 50px rgba(255, 20, 147, 0.3);
+      }
+
+      .laptop-screen.glowing::after {
+        background: radial-gradient(circle, #4ade80 0%, #22c55e 100%);
+        box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+      }
+
+      .screen-content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: linear-gradient(135deg, #3d1b3d, #6b2f5c, #4a1942);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .laptop-base {
+        position: absolute;
+        width: 600px;
+        height: 20px;
+        background: linear-gradient(to bottom, #444, #222);
+        border-radius: 0 0 20px 20px;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%) rotateX(85deg);
+        transform-origin: top center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .laptop-base::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 105, 180, 0.3),
+          transparent
+        );
+        border-radius: 2px;
+      }
+
+      .screen-bezel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .screen-bezel::before {
+        content: "OMEN";
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        font-size: 8px;
+        color: rgba(255, 182, 193, 0.3);
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .portal {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 1s ease;
+        filter: drop-shadow(0 0 30px rgba(255, 20, 147, 0.8));
+        cursor: default;
+      }
+
+      .portal.active {
+        opacity: 1;
+        transform: scale(1);
+        animation: portalPulse 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 60px rgba(255, 20, 147, 1))
+          drop-shadow(0 0 90px rgba(255, 105, 180, 0.8));
+        cursor: pointer;
+      }
+
+      @keyframes portalPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .portal-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 4px solid;
+        animation: portalRotate 4s linear infinite;
+        box-shadow:
+          0 0 20px currentColor,
+          inset 0 0 20px currentColor;
+      }
+
+      .portal-ring:nth-child(1) {
+        border-color: rgba(255, 20, 147, 1);
+        animation-duration: 3s;
+      }
+
+      .portal-ring:nth-child(2) {
+        border-color: rgba(255, 105, 180, 1);
+        animation-duration: 4s;
+        animation-direction: reverse;
+        transform: scale(0.9);
+      }
+
+      .portal-ring:nth-child(3) {
+        border-color: rgba(255, 182, 193, 0.9);
+        animation-duration: 5s;
+        transform: scale(0.8);
+      }
+
+      @keyframes portalRotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .portal-center {
+        position: absolute;
+        width: 80%;
+        height: 80%;
+        top: 10%;
+        left: 10%;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 105, 180, 0.6) 0%,
+          rgba(255, 20, 147, 0.5) 30%,
+          rgba(139, 0, 69, 0.9) 70%,
+          transparent 100%
+        );
+        animation: portalSwirl 3s ease-in-out infinite;
+        box-shadow:
+          0 0 40px rgba(255, 105, 180, 0.8),
+          inset 0 0 40px rgba(255, 20, 147, 0.6);
+      }
+
+      @keyframes portalSwirl {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+        }
+      }
+
+      .portal-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .particle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 105, 180, 1);
+        border-radius: 50%;
+        animation: particleFloat 3s ease-in-out infinite;
+        box-shadow:
+          0 0 15px rgba(255, 105, 180, 1),
+          0 0 25px rgba(255, 20, 147, 0.8);
+      }
+
+      @keyframes particleFloat {
+        0%,
+        100% {
+          transform: translate(0, 0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+      }
+
+      .object {
+        position: absolute;
+        font-size: 40px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+
+      .object:hover {
+        transform: scale(1.2);
+      }
+
+      .object.teleporting {
+        animation: teleport 2s ease-in-out;
+      }
+
+      @keyframes teleport {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        45% {
+          transform: scale(0.5) translateY(-50px);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(0) rotate(360deg);
+          opacity: 0;
+        }
+        55% {
+          transform: scale(0) rotate(720deg);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) rotate(720deg);
+          opacity: 1;
+        }
+      }
+
+      .glow-effect {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .glow-effect.active {
+        opacity: 1;
+      }
+
+      .glow-ray {
+        position: absolute;
+        width: 2px;
+        height: 150%;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(255, 20, 147, 0.5),
+          transparent
+        );
+        top: -25%;
+        animation: rayRotate 4s linear infinite;
+        transform-origin: center;
+      }
+
+      @keyframes rayRotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .instructions {
+        position: absolute;
+        bottom: 50px;
+        color: #ffb3d9;
+        text-align: center;
+        font-size: 18px;
+        text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+        opacity: 0;
+        animation: fadeIn 1s ease 1s forwards;
+      }
+
+      .instructions div {
+        transition: opacity 0.5s ease;
+      }
+
+      .white-flash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 9999;
+        transition: opacity 1.5s ease;
+      }
+
+      .white-flash.active {
+        opacity: 1;
+      }
+
+      .scene.initial .laptop {
+        opacity: 1;
+      }
+
+      .scene.initial .floating-hearts {
+        opacity: 1;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 15px 30px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.5s ease;
+        box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+        font-weight: bold;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 20, 147, 0.6);
+        background: linear-gradient(135deg, #ff1493 0%, #ff85c1 100%);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .floating-hearts {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .heart {
+        position: absolute;
+        font-size: 30px;
+        opacity: 0;
+        animation: floatHeart 8s ease-in infinite;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(100vh) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.8;
+        }
+        90% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-100px) scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* Image container for final reveal */
+      .final-image-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1s ease;
+        z-index: 10000;
+      }
+
+      .final-image-container.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .final-image-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      /* Mobile: fit to width */
+      @media (max-width: 768px) {
+        .final-image-container img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Desktop: fit to height */
+      @media (min-width: 769px) {
+        .final-image-container img {
+          width: auto;
+          height: 100vh;
+        }
+      }
+
+      /* Text stages container */
+      .text-stage-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1.5s ease;
+        z-index: 10001;
+        cursor: pointer;
+        padding: 2rem;
+      }
+
+      .text-stage-container.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .text-stage-content {
+        font-size: 2.5rem;
+        color: #d63384;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
+        text-align: center;
+        white-space: nowrap;
+        animation: textPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes textPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
+      /* Mobile responsive for text */
+      @media (max-width: 768px) {
+        .text-stage-content {
+          font-size: 1.8rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .text-stage-content {
+          font-size: 1.3rem;
+        }
+      }
+
+      /* Final chocolate image container */
+      .chocolate-image-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1.5s ease;
+        z-index: 10002;
+        cursor: pointer;
+      }
+
+      .chocolate-image-container.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .chocolate-image-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      /* Mobile: fit to width */
+      @media (max-width: 768px) {
+        .chocolate-image-container img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Desktop: fit to height */
+      @media (min-width: 769px) {
+        .chocolate-image-container img {
+          width: auto;
+          height: 100vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="white-flash" id="whiteFlash"></div>
+    <div class="scene initial" id="scene">
+      <div class="floating-hearts" id="floatingHearts"></div>
+      <div class="laptop">
+        <div class="laptop-screen" id="screen">
+          <div class="screen-bezel"></div>
+          <div class="screen-content">
+            <div class="portal" id="portal">
+              <div class="portal-ring"></div>
+              <div class="portal-ring"></div>
+              <div class="portal-ring"></div>
+              <div class="portal-center"></div>
+              <div class="portal-particles" id="particles"></div>
+              <div class="glow-effect" id="glowEffect">
+                <div class="glow-ray" style="left: 50%"></div>
+                <div
+                  class="glow-ray"
+                  style="left: 50%; animation-delay: -1s"
+                ></div>
+                <div
+                  class="glow-ray"
+                  style="left: 50%; animation-delay: -2s"
+                ></div>
+                <div
+                  class="glow-ray"
+                  style="left: 50%; animation-delay: -3s"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+
+      <div class="instructions">
+        <div id="initialText" style="transition: opacity 0.5s ease">
+          <div>What is this?</div>
+          <div style="margin-top: 5px">(My laptop screen)</div>
+          <div style="font-size: 12px; opacity: 0.7; margin-top: 5px">
+            (click)
+          </div>
+        </div>
+        <div
+          id="portalText"
+          style="
+            opacity: 0;
+            transition: opacity 1s ease;
+            font-size: 48px;
+            font-weight: bold;
+          "
+        >
+          A portal? :0
+        </div>
+      </div>
+    </div>
+
+    <!-- Final image reveal -->
+    <div class="final-image-container" id="finalImageContainer">
+      <img src="img/whatif.png" alt="What if..." />
+    </div>
+
+    <!-- Text stage 1: Puts chocolate into portal -->
+    <div class="text-stage-container" id="textStage1">
+      <div class="text-stage-content">
+        <div>*puts the chocolate into the portal*</div>
+        <div style="font-size: 0.6em; margin-top: 15px; opacity: 0.7">
+          (click)
+        </div>
+      </div>
+    </div>
+
+    <!-- Text stage 2: Ouch! -->
+    <div class="text-stage-container" id="textStage2">
+      <div class="text-stage-content">
+        <div>*A girl flinches*</div>
+        <div style="margin-top: 15px">Ouch! What just fell on my head?!</div>
+      </div>
+    </div>
+
+    <!-- Final chocolate image -->
+    <div class="chocolate-image-container" id="chocolateImageContainer">
+      <img src="img/chockletonhand.png" alt="Chocolate on hand" />
+    </div>
+
+    <script>
+      const screen = document.getElementById("screen");
+      const portal = document.getElementById("portal");
+      const glowEffect = document.getElementById("glowEffect");
+      const activateBtn = document.getElementById("activateBtn");
+      const particles = document.getElementById("particles");
+      const objectInstructions = document.getElementById("objectInstructions");
+      const floatingHearts = document.getElementById("floatingHearts");
+      const whiteFlash = document.getElementById("whiteFlash");
+      const portalText = document.getElementById("portalText");
+      const instructions = document.querySelector(".instructions");
+      const scene = document.getElementById("scene");
+      const finalImageContainer = document.getElementById(
+        "finalImageContainer",
+      );
+      const textStage1 = document.getElementById("textStage1");
+      const textStage2 = document.getElementById("textStage2");
+      const chocolateImageContainer = document.getElementById(
+        "chocolateImageContainer",
+      );
+      const objects = [
+        "❤️",
+        "💕",
+        "💖",
+        "💗",
+        "💝",
+        "💘",
+        "🌹",
+        "💐",
+        "🎀",
+        "💌",
+        "😍",
+        "💑",
+        "🍫",
+        "🧁",
+      ];
+      let portalActive = false;
+      let portalFullyActive = false;
+
+      // Make entire scene clickable initially
+      scene.addEventListener("click", () => {
+        if (!portalActive) {
+          portalActive = true;
+          scene.classList.remove("initial");
+          scene.classList.add("activated");
+
+          // Hide initial text
+          const initialText = document.getElementById("initialText");
+          initialText.style.opacity = "0";
+
+          // Trigger white flash immediately
+          setTimeout(() => {
+            whiteFlash.classList.add("active");
+          }, 200);
+
+          setTimeout(() => {
+            // Activate portal
+            screen.classList.add("glowing");
+            portal.classList.add("active");
+            glowEffect.classList.add("active");
+
+            // Fade out white flash
+            whiteFlash.classList.remove("active");
+
+            // Show "A portal?" text after flash
+            setTimeout(() => {
+              portalText.style.opacity = "1";
+              portalFullyActive = true;
+            }, 1500);
+          }, 1500);
+        }
+      });
+
+      // Portal click to show final image
+      portal.addEventListener("click", (e) => {
+        if (portalFullyActive) {
+          e.stopPropagation();
+
+          // Fade out the scene
+          scene.classList.add("fade-out");
+
+          // Show final image after fade
+          setTimeout(() => {
+            finalImageContainer.classList.add("show");
+          }, 1000);
+        }
+      });
+
+      // Click on whatif.png to show first text stage
+      finalImageContainer.addEventListener("click", () => {
+        // Fade out whatif image
+        finalImageContainer.classList.remove("show");
+
+        // Show first text stage
+        setTimeout(() => {
+          textStage1.classList.add("show");
+        }, 1500);
+      });
+
+      // Click on first text stage to show second text stage
+      textStage1.addEventListener("click", () => {
+        // Fade out first text
+        textStage1.classList.remove("show");
+
+        // Show second text stage
+        setTimeout(() => {
+          textStage2.classList.add("show");
+        }, 1500);
+      });
+
+      // Click on second text stage to show chocolate image
+      textStage2.addEventListener("click", () => {
+        // Fade out second text
+        textStage2.classList.remove("show");
+
+        // Show chocolate image
+        setTimeout(() => {
+          chocolateImageContainer.classList.add("show");
+        }, 1500);
+      });
+
+      // Click on chocolate image to redirect
+      chocolateImageContainer.addEventListener("click", () => {
+        // Fade out the image
+        chocolateImageContainer.classList.remove("show");
+
+        // Redirect after fade completes
+        setTimeout(() => {
+          window.location.href = "https://formyloveprishu.vercel.app/";
+        }, 1500);
+      });
+
+      // Create floating hearts in background
+      function createFloatingHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = ["💕", "💖", "💗", "💝"][
+          Math.floor(Math.random() * 4)
+        ];
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        heart.style.animationDuration = `${6 + Math.random() * 4}s`;
+        floatingHearts.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 10000);
+      }
+
+      // Continuously create floating hearts
+      setInterval(createFloatingHeart, 1000);
+
+      // Create particles
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        const angle = (i / 30) * Math.PI * 2;
+        const radius = 40 + Math.random() * 80;
+        particle.style.left = `${50 + Math.cos(angle) * radius}%`;
+        particle.style.top = `${50 + Math.sin(angle) * radius}%`;
+        particle.style.animationDelay = `${Math.random() * 3}s`;
+        particles.appendChild(particle);
+      }
+
+      function spawnObjects() {
+        if (!portalActive) return;
+
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const obj = document.createElement("div");
+            obj.className = "object";
+            obj.textContent =
+              objects[Math.floor(Math.random() * objects.length)];
+            obj.style.left = `${Math.random() * 80 + 10}%`;
+            obj.style.top = `${Math.random() * 60 + 20}%`;
+
+            obj.addEventListener("click", () => teleportObject(obj));
+
+            document.querySelector(".scene").appendChild(obj);
+          }, i * 200);
+        }
+      }
+
+      function teleportObject(obj) {
+        if (!portalActive) return;
+
+        obj.classList.add("teleporting");
+
+        // Calculate position relative to portal
+        const portalRect = portal.getBoundingClientRect();
+        const objRect = obj.getBoundingClientRect();
+
+        setTimeout(() => {
+          const newX = Math.random() * 80 + 10;
+          const newY = Math.random() * 60 + 20;
+          obj.style.left = `${newX}%`;
+          obj.style.top = `${newY}%`;
+          obj.textContent = objects[Math.floor(Math.random() * objects.length)];
+        }, 1000);
+
+        setTimeout(() => {
+          obj.classList.remove("teleporting");
+        }, 2000);
+      }
+
+      // Initial glow effect
+      setTimeout(() => {
+        screen.classList.add("glowing");
+        setTimeout(() => {
+          screen.classList.remove("glowing");
+        }, 2000);
+      }, 500);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chocolate Day 🍫</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: white;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      /* Initial message container */
+      .message-container {
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.8s ease;
+        opacity: 1;
+        z-index: 10;
+      }
+
+      .message-container.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .message-text {
+        font-size: 3rem;
+        color: #d63384;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
+        animation: pulse 2s ease-in-out infinite;
+        user-select: none;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      /* Image container */
+      .image-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.8s ease 0.3s;
+        background: white;
+      }
+
+      .image-container.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      /* Mobile: fit to width */
+      @media (max-width: 768px) {
+        .image-container img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Desktop: fit to height */
+      @media (min-width: 769px) {
+        .image-container img {
+          width: auto;
+          height: 100vh;
+        }
+      }
+
+      /* Subtle hint */
+      .hint {
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #8b3a62;
+        opacity: 0.7;
+        animation: fadeInOut 3s ease-in-out infinite;
+      }
+
+      @keyframes fadeInOut {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.9;
+        }
+      }
+
+      /* Second screen container */
+      .second-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1s ease;
+        background: white;
+        z-index: 20;
+        cursor: pointer;
+      }
+
+      .second-container.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .second-container img {
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        display: block;
+        margin-bottom: 2rem;
+      }
+
+      .second-text {
+        font-size: 2.5rem;
+        color: #d63384;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
+        text-align: center;
+        padding: 0 1rem;
+      }
+
+      /* Mobile: fit to width for second image */
+      @media (max-width: 768px) {
+        .second-container img {
+          width: 100%;
+          height: auto;
+          max-height: none;
+        }
+
+        .second-text {
+          font-size: 2rem;
+        }
+      }
+
+      /* Desktop: fit to height for second image */
+      @media (min-width: 769px) {
+        .second-container img {
+          width: auto;
+          height: 70vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Initial message -->
+    <div class="message-container" id="messageContainer">
+      <div class="message-text">Smth for you &lt;3</div>
+      <div class="hint">✨ Click me ✨</div>
+    </div>
+
+    <!-- Image that appears after click -->
+    <div class="image-container" id="imageContainer">
+      <img src="img/thinking.png" alt="For you ❤️" />
+    </div>
+
+    <!-- Second screen that appears after clicking the first image -->
+    <div class="second-container" id="secondContainer">
+      <img src="img/screenglow.jpg" alt="Screen glow" />
+      <div class="second-text">What's happening??</div>
+    </div>
+
+    <script>
+      const messageContainer = document.getElementById("messageContainer");
+      const imageContainer = document.getElementById("imageContainer");
+      const secondContainer = document.getElementById("secondContainer");
+
+      // First click: Show first image
+      messageContainer.addEventListener("click", function () {
+        // Fade out the message
+        messageContainer.classList.add("fade-out");
+
+        // Show the image after a short delay
+        setTimeout(() => {
+          imageContainer.classList.add("show");
+        }, 300);
+      });
+
+      // Second click: Show second screen with screenglow
+      imageContainer.addEventListener("click", function () {
+        // Fade out the first image
+        imageContainer.style.opacity = "0";
+        imageContainer.style.transition = "opacity 1s ease";
+
+        // Show the second screen after fade
+        setTimeout(() => {
+          secondContainer.classList.add("show");
+        }, 800);
+      });
+
+      // Third click: Redirect to portal.html with fade out
+      secondContainer.addEventListener("click", function () {
+        // Fade out the second screen
+        secondContainer.style.opacity = "0";
+        secondContainer.style.transition = "opacity 1s ease";
+
+        // Redirect after fade completes
+        setTimeout(() => {
+          window.location.href = "portal.html";
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
