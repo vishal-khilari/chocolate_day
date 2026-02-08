@@ -2,23 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Chocolate Day 🍫</title>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
         background: white;
         min-height: 100vh;
+        min-height: -webkit-fill-available;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
       }
 
       /* Initial message container */
@@ -28,6 +38,8 @@
         transition: all 0.8s ease;
         opacity: 1;
         z-index: 10;
+        padding: 2rem;
+        touch-action: manipulation;
       }
 
       .message-container.fade-out {
@@ -36,12 +48,13 @@
       }
 
       .message-text {
-        font-size: 3rem;
+        font-size: clamp(2rem, 8vw, 3.5rem);
         color: #d63384;
         font-weight: 700;
         text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
         animation: pulse 2s ease-in-out infinite;
         user-select: none;
+        line-height: 1.3;
       }
 
       @keyframes pulse {
@@ -68,6 +81,7 @@
         pointer-events: none;
         transition: opacity 0.8s ease 0.3s;
         background: white;
+        touch-action: manipulation;
       }
 
       .image-container.show {
@@ -80,13 +94,26 @@
         max-height: 100%;
         object-fit: contain;
         display: block;
+        user-select: none;
+        -webkit-user-select: none;
+        pointer-events: auto;
       }
 
-      /* Mobile: fit to width */
+      /* Mobile optimizations */
       @media (max-width: 768px) {
         .image-container img {
           width: 100%;
           height: auto;
+          max-height: 100vh;
+          max-height: -webkit-fill-available;
+        }
+
+        .message-text {
+          font-size: clamp(2rem, 10vw, 3rem);
+        }
+
+        .hint {
+          font-size: clamp(0.9rem, 4vw, 1.1rem);
         }
       }
 
@@ -100,11 +127,12 @@
 
       /* Subtle hint */
       .hint {
-        margin-top: 1rem;
-        font-size: 1rem;
+        margin-top: 1.5rem;
+        font-size: clamp(0.9rem, 4vw, 1.2rem);
         color: #8b3a62;
         opacity: 0.7;
         animation: fadeInOut 3s ease-in-out infinite;
+        user-select: none;
       }
 
       @keyframes fadeInOut {
@@ -134,6 +162,8 @@
         background: white;
         z-index: 20;
         cursor: pointer;
+        padding: 1rem;
+        touch-action: manipulation;
       }
 
       .second-container.show {
@@ -143,31 +173,55 @@
 
       .second-container img {
         max-width: 100%;
-        max-height: 80vh;
+        max-height: 70vh;
+        max-height: 70dvh;
         object-fit: contain;
         display: block;
         margin-bottom: 2rem;
+        user-select: none;
+        -webkit-user-select: none;
       }
 
       .second-text {
-        font-size: 2.5rem;
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
         color: #d63384;
         font-weight: 700;
         text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
         text-align: center;
         padding: 0 1rem;
+        user-select: none;
+        line-height: 1.3;
       }
 
-      /* Mobile: fit to width for second image */
+      /* Mobile optimizations for second screen */
       @media (max-width: 768px) {
+        .second-container {
+          padding: 1rem 0.5rem;
+        }
+
         .second-container img {
           width: 100%;
           height: auto;
-          max-height: none;
+          max-height: 65vh;
+          max-height: 65dvh;
+          margin-bottom: 1.5rem;
         }
 
         .second-text {
-          font-size: 2rem;
+          font-size: clamp(1.5rem, 7vw, 2rem);
+          padding: 0 0.5rem;
+        }
+      }
+
+      /* Very small screens */
+      @media (max-height: 600px) {
+        .second-container img {
+          max-height: 55vh;
+          max-height: 55dvh;
+        }
+
+        .message-text {
+          font-size: clamp(1.5rem, 8vw, 2.5rem);
         }
       }
 
@@ -178,13 +232,31 @@
           height: 70vh;
         }
       }
+
+      /* Landscape mobile optimization */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .second-container {
+          flex-direction: row;
+          gap: 1rem;
+        }
+
+        .second-container img {
+          max-height: 80vh;
+          max-width: 50%;
+          margin-bottom: 0;
+        }
+
+        .second-text {
+          max-width: 45%;
+        }
+      }
     </style>
   </head>
   <body>
     <!-- Initial message -->
     <div class="message-container" id="messageContainer">
       <div class="message-text">Smth for you &lt;3</div>
-      <div class="hint">✨ Click me ✨</div>
+      <div class="hint">✨ Tap me ✨</div>
     </div>
 
     <!-- Image that appears after click -->
@@ -203,7 +275,21 @@
       const imageContainer = document.getElementById("imageContainer");
       const secondContainer = document.getElementById("secondContainer");
 
-      // First click: Show first image
+      // Prevent double-tap zoom on iOS
+      let lastTouchEnd = 0;
+      document.addEventListener(
+        "touchend",
+        function (event) {
+          const now = new Date().getTime();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        false,
+      );
+
+      // First click/tap: Show first image
       messageContainer.addEventListener("click", function () {
         // Fade out the message
         messageContainer.classList.add("fade-out");
@@ -214,7 +300,7 @@
         }, 300);
       });
 
-      // Second click: Show second screen with screenglow
+      // Second click/tap: Show second screen with screenglow
       imageContainer.addEventListener("click", function () {
         // Fade out the first image
         imageContainer.style.opacity = "0";
@@ -226,7 +312,7 @@
         }, 800);
       });
 
-      // Third click: Redirect to portal.html with fade out
+      // Third click/tap: Redirect to portal.html with fade out
       secondContainer.addEventListener("click", function () {
         // Fade out the second screen
         secondContainer.style.opacity = "0";
