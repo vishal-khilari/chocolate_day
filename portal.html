@@ -2,26 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Valentine's Love Portal</title>
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
 
       body {
         background: linear-gradient(to bottom, #2d1b3d, #4a1942, #1a0f1f);
         min-height: 100vh;
+        min-height: -webkit-fill-available;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
         overflow: hidden;
         perspective: 1000px;
         opacity: 0;
         animation: pageLoadFadeIn 1.5s ease forwards;
+        position: fixed;
+        width: 100%;
+        height: 100%;
       }
 
       @keyframes pageLoadFadeIn {
@@ -62,11 +72,13 @@
         position: relative;
         width: 100%;
         height: 100vh;
+        height: 100dvh;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         transition: opacity 1s ease;
+        touch-action: manipulation;
       }
 
       .scene.activated {
@@ -79,8 +91,8 @@
 
       .laptop {
         position: relative;
-        width: 600px;
-        height: 400px;
+        width: min(95vw, 600px);
+        height: min(63.33vw, 400px);
         transform-style: preserve-3d;
         animation: laptopFloat 3s ease-in-out infinite;
       }
@@ -97,17 +109,17 @@
 
       .laptop-screen {
         position: absolute;
-        width: 550px;
-        height: 350px;
+        width: min(87.5vw, 550px);
+        height: min(58.33vw, 350px);
         background: linear-gradient(135deg, #1a0a0f 0%, #2d1520 100%);
-        border: 15px solid #3d2233;
-        border-radius: 10px;
+        border: min(2.5vw, 15px) solid #3d2233;
+        border-radius: min(1.67vw, 10px);
         top: 0;
         left: 50%;
         transform: translateX(-50%) rotateX(0deg);
         box-shadow:
-          0 0 50px rgba(255, 20, 147, 0.5),
-          inset 0 0 30px rgba(255, 105, 180, 0.2);
+          0 0 min(8.33vw, 50px) rgba(255, 20, 147, 0.5),
+          inset 0 0 min(5vw, 30px) rgba(255, 105, 180, 0.2);
         overflow: hidden;
         transition: box-shadow 0.5s ease;
       }
@@ -115,40 +127,40 @@
       .laptop-screen::before {
         content: "";
         position: absolute;
-        top: -15px;
+        top: min(-2.5vw, -15px);
         left: 50%;
         transform: translateX(-50%);
-        width: 80px;
-        height: 8px;
+        width: min(13.33vw, 80px);
+        height: min(1.33vw, 8px);
         background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-        border-radius: 0 0 8px 8px;
+        border-radius: 0 0 min(1.33vw, 8px) min(1.33vw, 8px);
         z-index: 10;
       }
 
       .laptop-screen::after {
         content: "";
         position: absolute;
-        top: -12px;
+        top: min(-2vw, -12px);
         left: 50%;
         transform: translateX(-50%);
-        width: 6px;
-        height: 6px;
+        width: min(1vw, 6px);
+        height: min(1vw, 6px);
         background: radial-gradient(circle, #1a4d2e 0%, #0d2818 100%);
         border-radius: 50%;
         z-index: 11;
-        box-shadow: 0 0 3px rgba(26, 77, 46, 0.5);
+        box-shadow: 0 0 min(0.5vw, 3px) rgba(26, 77, 46, 0.5);
       }
 
       .laptop-screen.glowing {
         box-shadow:
-          0 0 100px rgba(255, 20, 147, 0.8),
-          0 0 150px rgba(255, 105, 180, 0.6),
-          inset 0 0 50px rgba(255, 20, 147, 0.3);
+          0 0 min(16.67vw, 100px) rgba(255, 20, 147, 0.8),
+          0 0 min(25vw, 150px) rgba(255, 105, 180, 0.6),
+          inset 0 0 min(8.33vw, 50px) rgba(255, 20, 147, 0.3);
       }
 
       .laptop-screen.glowing::after {
         background: radial-gradient(circle, #4ade80 0%, #22c55e 100%);
-        box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+        box-shadow: 0 0 min(1vw, 6px) rgba(74, 222, 128, 0.8);
       }
 
       .screen-content {
@@ -163,15 +175,15 @@
 
       .laptop-base {
         position: absolute;
-        width: 600px;
-        height: 20px;
+        width: min(95vw, 600px);
+        height: min(3.33vw, 20px);
         background: linear-gradient(to bottom, #444, #222);
-        border-radius: 0 0 20px 20px;
-        bottom: -15px;
+        border-radius: 0 0 min(3.33vw, 20px) min(3.33vw, 20px);
+        bottom: min(-2.5vw, -15px);
         left: 50%;
         transform: translateX(-50%) rotateX(85deg);
         transform-origin: top center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 min(1.67vw, 10px) min(5vw, 30px) rgba(0, 0, 0, 0.5);
       }
 
       .laptop-base::before {
@@ -180,15 +192,15 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 40px;
-        height: 4px;
+        width: min(6.67vw, 40px);
+        height: min(0.67vw, 4px);
         background: linear-gradient(
           90deg,
           transparent,
           rgba(255, 105, 180, 0.3),
           transparent
         );
-        border-radius: 2px;
+        border-radius: min(0.33vw, 2px);
       }
 
       .screen-bezel {
@@ -204,9 +216,9 @@
       .screen-bezel::before {
         content: "OMEN";
         position: absolute;
-        bottom: 10px;
-        right: 15px;
-        font-size: 8px;
+        bottom: min(1.67vw, 10px);
+        right: min(2.5vw, 15px);
+        font-size: clamp(6px, 1.33vw, 8px);
         color: rgba(255, 182, 193, 0.3);
         font-weight: bold;
         letter-spacing: 2px;
@@ -214,22 +226,23 @@
 
       .portal {
         position: absolute;
-        width: 300px;
-        height: 300px;
+        width: min(50vw, 300px);
+        height: min(50vw, 300px);
         border-radius: 50%;
         opacity: 0;
         transform: scale(0);
         transition: all 1s ease;
-        filter: drop-shadow(0 0 30px rgba(255, 20, 147, 0.8));
+        filter: drop-shadow(0 0 min(5vw, 30px) rgba(255, 20, 147, 0.8));
         cursor: default;
+        touch-action: manipulation;
       }
 
       .portal.active {
         opacity: 1;
         transform: scale(1);
         animation: portalPulse 2s ease-in-out infinite;
-        filter: drop-shadow(0 0 60px rgba(255, 20, 147, 1))
-          drop-shadow(0 0 90px rgba(255, 105, 180, 0.8));
+        filter: drop-shadow(0 0 min(10vw, 60px) rgba(255, 20, 147, 1))
+          drop-shadow(0 0 min(15vw, 90px) rgba(255, 105, 180, 0.8));
         cursor: pointer;
       }
 
@@ -248,11 +261,11 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        border: 4px solid;
+        border: min(0.67vw, 4px) solid;
         animation: portalRotate 4s linear infinite;
         box-shadow:
-          0 0 20px currentColor,
-          inset 0 0 20px currentColor;
+          0 0 min(3.33vw, 20px) currentColor,
+          inset 0 0 min(3.33vw, 20px) currentColor;
       }
 
       .portal-ring:nth-child(1) {
@@ -298,8 +311,8 @@
         );
         animation: portalSwirl 3s ease-in-out infinite;
         box-shadow:
-          0 0 40px rgba(255, 105, 180, 0.8),
-          inset 0 0 40px rgba(255, 20, 147, 0.6);
+          0 0 min(6.67vw, 40px) rgba(255, 105, 180, 0.8),
+          inset 0 0 min(6.67vw, 40px) rgba(255, 20, 147, 0.6);
       }
 
       @keyframes portalSwirl {
@@ -320,14 +333,14 @@
 
       .particle {
         position: absolute;
-        width: 5px;
-        height: 5px;
+        width: min(0.83vw, 5px);
+        height: min(0.83vw, 5px);
         background: rgba(255, 105, 180, 1);
         border-radius: 50%;
         animation: particleFloat 3s ease-in-out infinite;
         box-shadow:
-          0 0 15px rgba(255, 105, 180, 1),
-          0 0 25px rgba(255, 20, 147, 0.8);
+          0 0 min(2.5vw, 15px) rgba(255, 105, 180, 1),
+          0 0 min(4.17vw, 25px) rgba(255, 20, 147, 0.8);
       }
 
       @keyframes particleFloat {
@@ -346,13 +359,17 @@
 
       .object {
         position: absolute;
-        font-size: 40px;
+        font-size: clamp(24px, 6.67vw, 40px);
         cursor: pointer;
         transition: all 0.3s ease;
         z-index: 10;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
       }
 
-      .object:hover {
+      .object:hover,
+      .object:active {
         transform: scale(1.2);
       }
 
@@ -422,11 +439,15 @@
 
       .instructions {
         position: absolute;
-        bottom: 50px;
+        bottom: clamp(30px, 8.33vw, 50px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 500px;
         color: #ffb3d9;
         text-align: center;
-        font-size: 18px;
-        text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+        font-size: clamp(14px, 3vw, 18px);
+        text-shadow: 0 0 min(1.67vw, 10px) rgba(255, 105, 180, 0.8);
         opacity: 0;
         animation: fadeIn 1s ease 1s forwards;
       }
@@ -468,26 +489,24 @@
 
       button {
         margin-top: 20px;
-        padding: 15px 30px;
-        font-size: 16px;
+        padding: clamp(12px, 2.5vw, 15px) clamp(24px, 5vw, 30px);
+        font-size: clamp(14px, 2.67vw, 16px);
         background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
         color: white;
         border: none;
-        border-radius: 25px;
+        border-radius: clamp(20px, 4.17vw, 25px);
         cursor: pointer;
         transition: all 0.5s ease;
-        box-shadow: 0 5px 15px rgba(255, 20, 147, 0.4);
+        box-shadow: 0 min(0.83vw, 5px) min(2.5vw, 15px) rgba(255, 20, 147, 0.4);
         font-weight: bold;
+        touch-action: manipulation;
       }
 
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(255, 20, 147, 0.6);
-        background: linear-gradient(135deg, #ff1493 0%, #ff85c1 100%);
-      }
-
+      button:hover,
       button:active {
-        transform: translateY(0);
+        transform: translateY(-2px);
+        box-shadow: 0 min(1.33vw, 8px) min(3.33vw, 20px) rgba(255, 20, 147, 0.6);
+        background: linear-gradient(135deg, #ff1493 0%, #ff85c1 100%);
       }
 
       .floating-hearts {
@@ -500,9 +519,11 @@
 
       .heart {
         position: absolute;
-        font-size: 30px;
+        font-size: clamp(20px, 5vw, 30px);
         opacity: 0;
         animation: floatHeart 8s ease-in infinite;
+        user-select: none;
+        -webkit-user-select: none;
       }
 
       @keyframes floatHeart {
@@ -537,6 +558,7 @@
         pointer-events: none;
         transition: opacity 1s ease;
         z-index: 10000;
+        touch-action: manipulation;
       }
 
       .final-image-container.show {
@@ -549,6 +571,8 @@
         max-height: 100%;
         object-fit: contain;
         display: block;
+        user-select: none;
+        -webkit-user-select: none;
       }
 
       /* Mobile: fit to width */
@@ -556,6 +580,8 @@
         .final-image-container img {
           width: 100%;
           height: auto;
+          max-height: 100vh;
+          max-height: 100dvh;
         }
       }
 
@@ -584,6 +610,7 @@
         z-index: 10001;
         cursor: pointer;
         padding: 2rem;
+        touch-action: manipulation;
       }
 
       .text-stage-container.show {
@@ -592,13 +619,16 @@
       }
 
       .text-stage-content {
-        font-size: 2.5rem;
+        font-size: clamp(1.2rem, 5vw, 2.5rem);
         color: #d63384;
         font-weight: 700;
         text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.1);
         text-align: center;
-        white-space: nowrap;
         animation: textPulse 2s ease-in-out infinite;
+        user-select: none;
+        -webkit-user-select: none;
+        line-height: 1.4;
+        max-width: 90%;
       }
 
       @keyframes textPulse {
@@ -614,13 +644,19 @@
       /* Mobile responsive for text */
       @media (max-width: 768px) {
         .text-stage-content {
-          font-size: 1.8rem;
+          font-size: clamp(1rem, 4.5vw, 1.8rem);
+          padding: 0 1rem;
         }
       }
 
       @media (max-width: 480px) {
         .text-stage-content {
-          font-size: 1.3rem;
+          font-size: clamp(0.9rem, 4vw, 1.3rem);
+          padding: 0 0.5rem;
+        }
+
+        .text-stage-container {
+          padding: 1rem;
         }
       }
 
@@ -640,6 +676,7 @@
         transition: opacity 1.5s ease;
         z-index: 10002;
         cursor: pointer;
+        touch-action: manipulation;
       }
 
       .chocolate-image-container.show {
@@ -652,6 +689,8 @@
         max-height: 100%;
         object-fit: contain;
         display: block;
+        user-select: none;
+        -webkit-user-select: none;
       }
 
       /* Mobile: fit to width */
@@ -659,6 +698,8 @@
         .chocolate-image-container img {
           width: 100%;
           height: auto;
+          max-height: 100vh;
+          max-height: 100dvh;
         }
       }
 
@@ -667,6 +708,52 @@
         .chocolate-image-container img {
           width: auto;
           height: 100vh;
+        }
+      }
+
+      /* Very small screens and landscape optimization */
+      @media (max-height: 600px) {
+        .laptop {
+          width: min(80vw, 500px);
+          height: min(53.33vw, 333px);
+        }
+
+        .laptop-screen {
+          width: min(73.33vw, 458px);
+          height: min(48.67vw, 292px);
+        }
+
+        .portal {
+          width: min(40vw, 240px);
+          height: min(40vw, 240px);
+        }
+
+        .instructions {
+          bottom: clamp(20px, 5vw, 30px);
+          font-size: clamp(12px, 2.5vw, 16px);
+        }
+      }
+
+      /* Landscape mobile */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .laptop {
+          width: min(60vh, 500px);
+          height: min(40vh, 333px);
+        }
+
+        .laptop-screen {
+          width: min(55vh, 458px);
+          height: min(36.67vh, 292px);
+        }
+
+        .portal {
+          width: min(30vh, 240px);
+          height: min(30vh, 240px);
+        }
+
+        .instructions {
+          bottom: 20px;
+          font-size: 14px;
         }
       }
     </style>
@@ -710,8 +797,8 @@
         <div id="initialText" style="transition: opacity 0.5s ease">
           <div>What is this?</div>
           <div style="margin-top: 5px">(My laptop screen)</div>
-          <div style="font-size: 12px; opacity: 0.7; margin-top: 5px">
-            (click)
+          <div style="font-size: 0.7em; opacity: 0.7; margin-top: 5px">
+            (tap)
           </div>
         </div>
         <div
@@ -719,7 +806,7 @@
           style="
             opacity: 0;
             transition: opacity 1s ease;
-            font-size: 48px;
+            font-size: clamp(32px, 8vw, 48px);
             font-weight: bold;
           "
         >
@@ -738,7 +825,7 @@
       <div class="text-stage-content">
         <div>*puts the chocolate into the portal*</div>
         <div style="font-size: 0.6em; margin-top: 15px; opacity: 0.7">
-          (click)
+          (tap)
         </div>
       </div>
     </div>
@@ -760,9 +847,7 @@
       const screen = document.getElementById("screen");
       const portal = document.getElementById("portal");
       const glowEffect = document.getElementById("glowEffect");
-      const activateBtn = document.getElementById("activateBtn");
       const particles = document.getElementById("particles");
-      const objectInstructions = document.getElementById("objectInstructions");
       const floatingHearts = document.getElementById("floatingHearts");
       const whiteFlash = document.getElementById("whiteFlash");
       const portalText = document.getElementById("portalText");
@@ -794,6 +879,20 @@
       ];
       let portalActive = false;
       let portalFullyActive = false;
+
+      // Prevent double-tap zoom on iOS
+      let lastTouchEnd = 0;
+      document.addEventListener(
+        "touchend",
+        function (event) {
+          const now = new Date().getTime();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        false,
+      );
 
       // Make entire scene clickable initially
       scene.addEventListener("click", () => {
@@ -941,10 +1040,6 @@
         if (!portalActive) return;
 
         obj.classList.add("teleporting");
-
-        // Calculate position relative to portal
-        const portalRect = portal.getBoundingClientRect();
-        const objRect = obj.getBoundingClientRect();
 
         setTimeout(() => {
           const newX = Math.random() * 80 + 10;
